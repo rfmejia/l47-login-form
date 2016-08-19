@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../paper-input/paper-input.html">
 
 <!--
@@ -26,6 +27,9 @@ Stylized login form suitable for single page apps.
       height: 280px;
       margin: 0 60px;
     }
+    div {
+      margin-bottom: 20px;
+    }
 
     @media (max-width: 600px) {
       #main {
@@ -46,6 +50,12 @@ Stylized login form suitable for single page apps.
       <div class="vertical layout">
         <paper-input id="usernameInput" placeholder="{{usernamePlaceholder}}" value="{{username}}" autofocus required></paper-input>
         <paper-input id="passwordInput" type="password" placeholder="{{passwordPlaceholder}}" value="{{password}}" required></paper-input>
+      </div>
+      <div>
+        <paper-checkbox hidden="{{!withRememberMe}}" value="{{rememberMe}}">{{rememberMePlaceholder}}</paper-checkbox>
+      </div>
+      <div>
+        <a href='#' on-click="passwordResetClicked" hidden="{{!withPasswordReset}}">{{passwordResetPlaceholder}}</a>
       </div>
     </form>
   </div>
@@ -76,8 +86,36 @@ Stylized login form suitable for single page apps.
           value: 'Password',
         },
 
+        withRememberMe: {
+          type: Boolean,
+          value: false,
+        },
+
+        rememberMePlaceholder: {
+          type: String,
+          value: 'Remember me',
+        },
+
+        rememberMe: {
+          type: Boolean,
+          value: false,
+        },
+
+        withPasswordReset: {
+          type: Boolean,
+          value: false,
+        },
+
+        passwordResetPlaceholder: {
+          type: String,
+          value: 'Reset password',
+        },
+
       },
 
+      passwordResetClicked: function(event) {
+        this.fire('password-reset-clicked', event.detail);
+      },
     });
   </script>
 </dom-module>

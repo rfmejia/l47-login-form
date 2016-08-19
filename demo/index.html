@@ -31,7 +31,9 @@
             <paper-button on-tap="openLoginForm" raised>Open login form</paper-button>
 
             <paper-dialog id="dialog">
-              <l47-login-form username-placeholder="Enter your email">
+              <l47-login-form username-placeholder="Enter your email"
+                with-remember-me remember-me="{{remember}}"
+                with-password-reset password-reset-placeholder="Forgot password?">
                 <iron-image src="http://www.hsdtaxlaw.com/wp-content/uploads/2016/05/20140806_LogoSupporterPlaceholder.png" width=200 height=200 sizing="contain"></iron-image>
               </l47-login-form>
               <div class="buttons">
@@ -47,6 +49,10 @@
               scope.openLoginForm = function() {
                 dialog.open();
               };
+
+              window.addEventListener('password-reset-clicked', function(event) {
+                console.log('Password reset clicked');
+              });
             </script>
           </template>
         </template>
