@@ -1,0 +1,83 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../paper-input/paper-input.html">
+
+<!--
+`l47-login-form`
+Stylized login form suitable for single page apps.
+
+@demo demo/index.html 
+-->
+
+<dom-module id="l47-login-form">
+<template>
+  <style>
+    :host {
+      display: block;
+    }
+    #main {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+    }
+    vr {
+      border-left: 1px solid var(--primary-text-color);
+      border-right: 1px solid var(--secondary-text-color);
+      height: 280px;
+      margin: 0 60px;
+    }
+
+    @media (max-width: 600px) {
+      #main {
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+      }
+      vr {
+        display: none;
+      }
+    }
+  </style>
+
+  <div id="main">
+    <content></content>
+    <vr></vr>
+    <form is="iron-form" id="loginForm">
+      <div class="vertical layout">
+        <paper-input id="usernameInput" placeholder="{{usernamePlaceholder}}" value="{{username}}" autofocus required></paper-input>
+        <paper-input id="passwordInput" type="password" placeholder="{{passwordPlaceholder}}" value="{{password}}" required></paper-input>
+      </div>
+    </form>
+  </div>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'l47-login-form',
+
+      properties: {
+        username: {
+          type: String,
+        },
+
+        usernamePlaceholder: {
+          type: String,
+          value: 'Username'
+        },
+
+        password: {
+          type: String,
+        },
+
+        passwordPlaceholder: {
+          type: String,
+          value: 'Password',
+        },
+
+      },
+
+    });
+  </script>
+</dom-module>

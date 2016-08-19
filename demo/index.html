@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <title>l47-login-form demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+    <link rel="import" href="../../iron-image/iron-image.html">
+    <link rel="import" href="../../paper-button/paper-button.html">
+    <link rel="import" href="../../paper-dialog/paper-dialog.html">
+
+    <link rel="import" href="../l47-login-form.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+      #dialog {
+        width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="vertical-section-container centered">
+      <h3>Basic l47-login-form Demo</h3>
+      <demo-snippet>
+        <template>
+          <template is="dom-bind" id="scope">
+            <paper-button on-tap="openLoginForm" raised>Open login form</paper-button>
+
+            <paper-dialog id="dialog">
+              <l47-login-form username-placeholder="Enter your email">
+                <iron-image src="http://www.hsdtaxlaw.com/wp-content/uploads/2016/05/20140806_LogoSupporterPlaceholder.png" width=200 height=200 sizing="contain"></iron-image>
+              </l47-login-form>
+              <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm>Sign in</paper-button>
+              </div>
+            </paper-dialog>
+
+            <script>
+              var scope = document.querySelector('#scope');
+              var dialog = document.querySelector('#dialog');
+
+              scope.openLoginForm = function() {
+                dialog.open();
+              };
+            </script>
+          </template>
+        </template>
+      </demo-snippet>
+    </div>
+
+  </body>
+</html>
