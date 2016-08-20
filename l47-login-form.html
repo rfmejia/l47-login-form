@@ -52,7 +52,7 @@ Listen to the 'login-clicked' event to catch the username and password. After th
   <div id="main">
     <content></content>
     <vr></vr>
-    <form is="iron-form" id="loginForm">
+    <form is="iron-form" id="form">
       <div class="vertical layout" style="margin-bottom: 15px">
         <paper-input id="usernameInput" placeholder="{{usernamePlaceholder}}" value="{{username}}" autofocus required></paper-input>
         <paper-input id="passwordInput" type="password" placeholder="{{passwordPlaceholder}}" value="{{_password}}" required></paper-input>
@@ -126,9 +126,19 @@ Listen to the 'login-clicked' event to catch the username and password. After th
         _password: String
       },
 
+      listeners: {
+        'iron-form-presubmit': '_handleFormSubmit'
+      },
+
+      _handleFormSubmit: function(event) {
+        if (!this.$.usernameInput.invalid && !this.$.passwordInput.invalid) {
+          this.fire('login-clicked', { username: this.username, password: this._password });
+          this._password = null;
+        }
+      },
+
       _loginClicked: function(event) {
-        this.fire('login-clicked', { username: this.username, password: this._password });
-        this._password = null;
+        this.$.form.submit();
       },
 
       _passwordResetClicked: function(event) {
