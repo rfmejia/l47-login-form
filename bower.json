@@ -6,7 +6,8 @@
     "polymer": "Polymer/polymer#^1.4.0",
     "iron-form": "PolymerElements/iron-form#^1.1.2",
     "paper-input": "PolymerElements/paper-input#^1.1.17",
-    "paper-checkbox": "PolymerElements/paper-checkbox#^1.4.0"
+    "paper-checkbox": "PolymerElements/paper-checkbox#^1.4.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.13"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
@@ -14,7 +15,6 @@
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
-    "iron-image": "PolymerElements/iron-image#^1.2.5",
-    "paper-button": "PolymerElements/paper-button#^1.0.13"
+    "iron-image": "PolymerElements/iron-image#^1.2.5"
   }
 }

@@ -8,6 +8,7 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
 
     <link rel="import" href="../../iron-image/iron-image.html">
     <link rel="import" href="../../paper-button/paper-button.html">
@@ -15,7 +16,7 @@
 
     <link rel="import" href="../l47-login-form.html">
 
-    <style is="custom-style" include="demo-pages-shared-styles">
+    <style is="custom-style" include="demo-pages-shared-styles iron-flex iron-flex-alignment">
       #dialog {
         width: 600px;
       }
@@ -31,15 +32,12 @@
             <paper-button on-tap="openLoginForm" raised>Open login form</paper-button>
 
             <paper-dialog id="dialog">
-              <l47-login-form username-placeholder="Enter your email"
-                with-remember-me remember-me="{{remember}}"
+              <l47-login-form username="{{username}}" password="{{password}}"
+                username-placeholder="Enter your email" login-button-text="Sign in"
+                with-remember-me remember-me="{{remember}}" remember-me-placeholder="Remember for 30 days"
                 with-password-reset password-reset-placeholder="Forgot password?">
                 <iron-image src="http://www.hsdtaxlaw.com/wp-content/uploads/2016/05/20140806_LogoSupporterPlaceholder.png" width=200 height=200 sizing="contain"></iron-image>
               </l47-login-form>
-              <div class="buttons">
-                <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm>Sign in</paper-button>
-              </div>
             </paper-dialog>
 
             <script>
@@ -49,6 +47,11 @@
               scope.openLoginForm = function() {
                 dialog.open();
               };
+
+              window.addEventListener('login-clicked', function(event) {
+                console.log('Login clicked:', event.detail.username, event.detail.password);
+                dialog.close();
+              });
 
               window.addEventListener('password-reset-clicked', function(event) {
                 console.log('Password reset clicked');
