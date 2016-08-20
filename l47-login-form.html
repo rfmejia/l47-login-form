@@ -1,6 +1,10 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../neon-animation/neon-animatable.html">
+<link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../paper-input/paper-input.html">
@@ -24,17 +28,28 @@ Listen to the 'login-clicked' event to catch the username and password. After th
       @apply(--layout-horizontal);
       @apply(--layout-center-center);
     }
+    neon-animated-pages {
+      @apply(--layout-flex);
+      width: 100%;
+      min-height: 230px;
+      margin: 18px;
+    }
     vr {
       border-left: 1px solid var(--primary-text-color);
       border-right: 1px solid var(--secondary-text-color);
       height: 280px;
-      margin: 0 60px;
+      margin: 0 30px;
     }
-    paper-button[raised] {
-      background-color: var(--dark-primary-color);
+    paper-button {
       margin-top: 16px;
-      color: white;
       width: 100%;
+    }
+    paper-button.confirm {
+      color: white;
+      background-color: var(--dark-primary-color);
+    }
+    a {
+      @apply(paper-font-caption);
     }
 
     @media (max-width: 600px) {
@@ -51,24 +66,48 @@ Listen to the 'login-clicked' event to catch the username and password. After th
 
   <div id="main">
     <content></content>
+
     <vr></vr>
-    <form is="iron-form" id="form">
-      <div class="vertical layout" style="margin-bottom: 15px">
-        <paper-input id="usernameInput" placeholder="{{usernamePlaceholder}}" value="{{username}}" autofocus required></paper-input>
-        <paper-input id="passwordInput" type="password" placeholder="{{passwordPlaceholder}}" value="{{_password}}" required></paper-input>
-      </div>
-      <div>
-        <paper-checkbox hidden="{{!withRememberMe}}" value="{{rememberMe}}">{{rememberMePlaceholder}}</paper-checkbox>
-      </div>
-      <div style="margin-top: 10px">
-        <a href='#' on-click="_passwordResetClicked" hidden="{{!withPasswordReset}}">{{passwordResetPlaceholder}}</a>
-      </div>
-      
-      <div style="margin-top: 10px">
-        <paper-button raised on-tap="_loginClicked">{{loginButtonText}}</paper-button>
-        <button type="submit" hidden></button>
-      </div>
-    </form>
+
+    <neon-animated-pages id="pages" selected="[[selectedPage]]" attr-for-selected="id"
+      entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+
+      <!-- Login form -->
+      <neon-animatable id="loginPage">
+        <form is="iron-form" id="loginForm">
+          <div class="vertical layout" style="margin-bottom: 15px">
+            <paper-input id="usernameInput" placeholder="{{usernamePlaceholder}}" value="{{username}}" autofocus required></paper-input>
+            <paper-input id="passwordInput" type="password" placeholder="{{passwordPlaceholder}}" value="{{_password}}" required></paper-input>
+          </div>
+          <div hidden="{{!withRememberMe}}">
+            <paper-checkbox value="{{rememberMe}}">{{rememberMePlaceholder}}</paper-checkbox>
+          </div>
+          <div style="margin-top: 10px" hidden="{{!withPasswordReset}}">
+            <a href='#' on-click="_showPasswordResetForm">{{passwordResetPlaceholder}}</a>
+          </div>
+
+          <div style="margin-top: 10px">
+            <paper-button class="confirm" raised on-tap="_loginClicked">{{loginButtonText}}</paper-button>
+            <button type="submit" hidden></button>
+          </div>
+        </form>
+      </neon-animatable>
+
+      <!-- Password reset -->
+      <neon-animatable id="passwordResetPage">
+        <form is="iron-form" id="passwordResetForm">
+          <div style="margin-bottom: 35px">
+            <paper-input id="usernameInput" placeholder="{{usernamePlaceholder}}" value="{{username}}" required></paper-input>
+          </div>
+          <div>
+            <paper-button class="confirm" raised on-tap="_passwordResetClicked">{{passwordResetButtonText}}</paper-button>
+            <paper-button on-tap="_showLoginForm">Back</paper-button>
+            <button type="submit" hidden></button>
+          </div>
+        </form>
+      </neon-animatable>
+
+    </neon-animated-pages>
   </div>
 
   </template>
@@ -123,26 +162,46 @@ Listen to the 'login-clicked' event to catch the username and password. After th
           value: 'Reset password',
         },
 
-        _password: String
+        passwordResetButtonText: {
+          type: String,
+          value: 'Recover password',
+        },
+
+        _password: String,
       },
 
       listeners: {
         'iron-form-presubmit': '_handleFormSubmit'
       },
 
+      ready: function() {
+        this._showLoginForm();
+      },
+
       _handleFormSubmit: function(event) {
-        if (!this.$.usernameInput.invalid && !this.$.passwordInput.invalid) {
+        if (event.target.id === 'loginForm' && !this.$.usernameInput.invalid && !this.$.passwordInput.invalid) {
           this.fire('login-clicked', { username: this.username, password: this._password });
           this._password = null;
+        }
+        else if (event.target.id === 'passwordResetForm' && !this.$.usernameInput.invalid) {
+          this.fire('password-reset-clicked', { email: this.email });
         }
       },
 
       _loginClicked: function(event) {
-        this.$.form.submit();
+        this.$.loginForm.submit();
       },
 
       _passwordResetClicked: function(event) {
-        this.fire('password-reset-clicked', event.detail);
+        this.$.passwordResetForm.submit();
+      },
+
+      _showLoginForm: function() {
+        this.$.pages.selected = 'loginPage';
+      },
+
+      _showPasswordResetForm: function() {
+        this.$.pages.selected = 'passwordResetPage';
       },
     });
   </script>
